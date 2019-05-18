@@ -1,0 +1,27 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="game-card">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+        </style>
+
+    </template>
+
+    <script>
+        class GameCard extends Polymer.Element {
+            static get is() {
+                return 'game-card';
+            }
+
+            static get properties() {
+                return {
+                    // Declare your properties here.
+                };
+            }
+        }
+        customElements.define(GameCard.is, GameCard);
+    </script>
+</dom-module>

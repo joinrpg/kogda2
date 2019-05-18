@@ -1,0 +1,324 @@
+
+<!-- Dependency resources -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/vaadin-text-field/src/vaadin-text-field.html">
+<link rel="import" href="../bower_components/vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/vaadin-lumo-styles/badge.html">
+
+<link rel="import" href="../bower_components/vaadin-lumo-styles/icons.html">
+
+
+<!-- Defines the games-list element -->
+<dom-module id="game-list">
+    <template>
+        <style include="lumo-color lumo-typography lumo-badge view-styles">
+            :host {
+                display: block;
+                width: 100%;
+            }
+
+            #header {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                align-items: baseline;
+            }
+            .view-toolbar__search-field{
+                width: max-content;
+            }
+
+
+            /* Subtitle for the header */
+            #header span {
+                display: block;
+                font-size: var(--lumo-font-size-s);
+                font-weight: 400;
+                color: var(--lumo-secondary-text-color);
+                letter-spacing: 0;
+                margin-top: 0.3em;
+                margin-left: auto;
+                margin-right: 20px;
+            }
+
+            .game {
+                display: flex;
+                align-items: stretch;
+                justify-content: space-between;
+                width: 100%;
+                padding: var(--lumo-space-l);
+                padding-right: var(--lumo-space-m);
+                box-sizing: border-box;
+                margin-bottom: 8px;
+                background-color: var(--lumo-base-color);
+                box-shadow: 0 0 0 1px var(--lumo-shade-5pct), 0 2px 5px 0 var(--lumo-shade-10pct);
+                border-radius: var(--lumo-border-radius);
+
+            }
+            .game__content{
+                display: flex;
+                justify-content: space-between;
+                flex-grow: 1;
+                flex-wrap: wrap;
+            }
+
+            .game__stats {
+                flex: none;
+                align-self: flex-start;
+                margin: 0 1em 0 0;
+                position: relative;
+                cursor: default;
+            }
+
+            .game__status {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: var(--lumo-border-radius);
+                font-weight: 600;
+                padding: 0.25em;
+                margin: auto;
+                min-width: 5em;
+            }
+
+            [status*="status-ok"] {
+                background-color: var(--lumo-success-color);
+            }
+
+            [status*="status-finish"] {
+                background-color: var(--lumo-success-color-50pct);
+            }
+
+            [status*="status-unknown"] {
+                background-color: var(--lumo-disabled-text-color);
+            }
+
+            [status*="status-postponedd"] {
+                background-color: hsla(50, 60%, 75%, 0.5);
+
+            }
+
+            [status*="status-date"] {
+                background-color: hsla(55, 90%, 52%, 0.5);
+
+            }
+
+            [status*="status-canceled"] {
+                background-color: var(--lumo-error-color-50pct);
+            }
+
+            .game__quantity {
+                /* position: absolute;*/
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                /*height: 20px;*/
+                min-width: 2em;
+                padding: 6px 12px;
+                background: var(--lumo-base-color);
+                color: var(--lumo-secondary-text-color);
+                /*top: -10px;
+                left: -10px;*/
+                border-radius: var(--lumo-border-radius);
+                margin: auto;
+                font-size: var(--lumo-font-size-xxl);
+                font-weight: 900;
+                box-shadow: 0 0 0 1px var(--lumo-contrast-20pct);
+            }
+
+            .game__quantity span {
+                width: 0;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .game__quantity:hover .game__quantity span {
+                width: auto;
+                margin-left: 0.4em;
+            }
+
+            .game__details {
+                width: auto;
+                max-width: calc(100% - 8.5em);
+                flex: auto;
+                line-height: var(--lumo-line-height-xs);
+                overflow: hidden;
+            }
+
+            .game__name {
+                margin: 0 0.5em 0 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .game__type {
+                margin: 0;
+                flex: none;
+            }
+            .game__location{
+                margin: 0 0.5em ;
+            }
+
+            .game__region {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--lumo-base-color);
+                color: var(--lumo-secondary-text-color);
+                padding: 0.25em 0;
+                margin: 0;
+            }
+
+            .game__region span {
+                width: 0;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .game__region:hover .game__region span {
+                width: auto;
+                margin-left: 0.4em;
+            }
+            .game__polygon{
+                margin: 0;
+            }
+
+            /* We only expect to have 10 categories at most, after which the colors start to rotate */
+            .game__type {
+                color: hsla(calc(340 + 360 / 10 * var(--category)), 40%, 20%, 1);
+                background-color: hsla(calc(340 + 360 / 10 * var(--category)), 60%, 50%, 0.1);
+            }
+
+            .game__date {
+                min-width: 6em;
+                white-space: nowrap;
+                line-height: var(--lumo-line-height-xs);
+                margin: 0 0.5em ;
+                align-self: stretch;
+              
+            }
+
+            .game__date h5 {
+                font-size: var(--lumo-font-size-s);
+                font-weight: 400;
+                color: var(--lumo-secondary-text-color);
+                margin: 0;
+            }
+
+            .game__date p {
+                font-size: var(--lumo-font-size-s);
+                margin: 0;
+            }
+
+            .game__edit {
+                align-self: flex-start;
+                flex: none;
+                margin: 0 0 0 auto;
+                width: 5em;
+                flex-grow: 0;
+            }
+
+            .games__no-matches {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 4em;
+                font-size: 22px;
+                color: var(--lumo-tertiary-text-color);
+            }
+
+            /* Small viewport styles */
+
+            @media (max-width: 500px) {
+                .game {
+                    padding: var(--lumo-space-m);
+                    padding-right: var(--lumo-space-s);
+                    flex-wrap: wrap;
+                }
+
+                .game__date {
+                    order: 1;
+                    margin-left: 3.5em;
+                    margin-top: 0.5em;
+                }
+            }
+
+        </style>
+
+        <div class="view-toolbar">
+            <vaadin-text-field id="search" class="view-toolbar__search-field" autocapitalize=off>
+                <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+            </vaadin-text-field>
+            <vaadin-button id="newGame" class="view-toolbar__button" theme="primary">
+                <iron-icon icon="lumo:plus" slot="prefix"></iron-icon>
+                <span>Добавить игру</span>
+            </vaadin-button>
+        </div>
+
+        <div class="view-container games">
+            <h2 id="header"></h2>
+            <template is="dom-if" if="{{!_isEmpty(games)}}">
+                <template is="dom-repeat" items="[[games]]">
+                    <div class="game" on-click="show">
+                        <div class="game__content">
+                            <div class="game__stats">
+                                <p class="game__status" status$='[[item.status.style]]' >[[item.status.name]]</p>
+                            </div>
+                            <div class="game__details">
+                                <h4 class="game__name">[[item.name]]</h4>
+                                <template is="dom-if" if="[[item.type]]">
+                                    <p class="game__type" theme="badge small" style$="--category: [[item.type.id]];">[[item.type.name]]</p>
+                                </template>
+                                <template is="dom-if" if="[[!item.type]]">
+                                    <p class="game__type" style="--category: -1;">Неизвестно</p>
+                                </template>
+                                <div class="game__mg">
+                                    [[item.mg]]
+                                </div>    
+                            </div>
+                            <div class="game__location">
+                                <p class="game__region">
+                                    [[item.region.shortName]]
+                                    <span>[[item.region.name]]</span>
+                                </p>
+                                <p class="game__polygon">[[item.polygon.name]]<p>
+                            </div>
+                            <div class="game__quantity">
+                                <template is="dom-if" if="[[!item.quantity]]">???</template>
+                                [[item.quantity]]
+                                <span>Количество игроков</span>
+                            </div>
+                            <div class="game__date">
+                                <h5>Даты</h5>
+                                <p>[[item.dates]]</p>
+                            </div>
+                        </div>
+                        <vaadin-button on-click="edit" class="game__edit" theme="tertiary">
+                            <iron-icon icon="lumo:edit"></iron-icon><span>[[editButtonText]]</span>
+                        </vaadin-button>
+                    </div>
+                </template>
+            </template>
+
+            <template is="dom-if" if="{{_isEmpty(games)}}">
+                <div class="gamess__no-matches">Нет игр</div>
+            </template>
+        </div>
+    </template>
+
+    <!-- Polymer boilerplate to register the games-list element -->
+    <script>
+        class GameListElement extends Polymer.Element {
+        static get is() {
+        return 'game-list'
+        }
+
+        _isEmpty(array) {
+        return array.length == 0;
+        }
+        }
+        customElements.define(GameListElement.is, GameListElement);
+    </script>
+
+</dom-module>
