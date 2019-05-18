@@ -63,10 +63,13 @@ stages:
             inputs:
               buildType: 'current'
 
-          - task: AzureWebApp@1
+          - task: AzureRmWebAppDeployment@4
             displayName: 'Azure Web App Deploy: Kogda2-beta'
             inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              package: '$(System.ArtifactsDirectory)/drop/**/target/*.?(war|jar)'
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Visual Studio Premium with MSDN (f0fe6f62-070f-4b7b-bcd1-c4265207fead)'
+              appType: 'webAppLinux'
+              WebAppName: 'kogda2-beta'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/kogdaigra-1.0-SNAPSHOT.jar'
+              RuntimeStack: 'JAVA|11-java11'
+              StartupCommand: 'java -jar kogdaigra-1.0-SNAPSHOT.jar'
