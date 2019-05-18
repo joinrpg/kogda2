@@ -44,6 +44,8 @@ stages:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
 
+    - task: PublishBuildArtifacts@1
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
@@ -70,6 +72,6 @@ stages:
               azureSubscription: 'Visual Studio Premium with MSDN (f0fe6f62-070f-4b7b-bcd1-c4265207fead)'
               appType: 'webAppLinux'
               WebAppName: 'kogda2-beta'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/kogdaigra-1.0-SNAPSHOT.jar'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
               RuntimeStack: 'JAVA|11-java11'
               StartupCommand: 'java -jar kogdaigra-1.0-SNAPSHOT.jar'
