@@ -44,8 +44,6 @@ stages:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
 
-    - task: PublishBuildArtifacts@1
-
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
