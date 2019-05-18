@@ -43,33 +43,3 @@ stages:
       displayName: 'Publish pipeline artifacts'
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: DeployLinuxWebApp
-    displayName: Deploy Linux Web App
-    environment: 'development'
-    pool: 
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: DownloadPipelineArtifact@1
-            displayName: 'Download Pipeline Artifact'
-            inputs:
-              buildType: 'current'
-
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure Web App Deploy: Kogda2-beta'
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'Visual Studio Premium with MSDN (f0fe6f62-070f-4b7b-bcd1-c4265207fead)'
-              appType: 'webAppLinux'
-              WebAppName: 'kogda2-beta'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-              RuntimeStack: 'JAVA|11-java11'
-              StartupCommand: 'java -jar kogdaigra-1.0-SNAPSHOT.jar'
