@@ -18,7 +18,7 @@ import static sergey.bychkov.kogdaigra.util.Util.getCurrentYear;
 /**
  * The main view contains a button and a click listener.
  */
-@Route(value = "", layout = MainLayout.class)
+//@Route(value = "", layout = MainLayout.class)
 public class MainView extends VerticalLayout  {
 
     private Div header;
