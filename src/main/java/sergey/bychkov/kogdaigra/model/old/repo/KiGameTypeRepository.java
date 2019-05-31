@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sergey.bychkov.kogdaigra.model.old;
+package sergey.bychkov.kogdaigra.model.old.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import sergey.bychkov.kogdaigra.model.old.KiGameType;
 
 /**
  *
  * @author serge
  */
-public interface KiPolygonRepository extends JpaRepository<KiPolygon, Integer> {
+public interface KiGameTypeRepository extends JpaRepository<KiGameType, Integer> {
     
 }

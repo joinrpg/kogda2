@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import sergey.bychkov.kogdaigra.backend.repo.*;
 import sergey.bychkov.kogdaigra.model.*;
 import sergey.bychkov.kogdaigra.model.old.*;
+import sergey.bychkov.kogdaigra.model.old.repo.*;
 import sergey.bychkov.kogdaigra.util.Util;
 
 import java.text.SimpleDateFormat;
@@ -20,48 +21,48 @@ public class Converter {
     private static final Logger LOG = Logger.getLogger(Converter.class.getName());
 
     @Autowired
-    private GameRepository gameRepo;
+    private GameRepository         gameRepo;
     @Autowired
-    private GameStatusRepository statusRepo;
+    private GameStatusRepository   statusRepo;
     @Autowired
-    private GameTypeRepository typeRepo;
+    private GameTypeRepository     typeRepo;
     @Autowired
-    private RegionRepository regionRepo;
+    private RegionRepository       regionRepo;
     @Autowired
-    private PolygonRepository polygonRepo;
+    private PolygonRepository      polygonRepo;
     @Autowired
-    private LinkTypeRepository linkTypeRepo;
+    private LinkTypeRepository     linkTypeRepo;
     @Autowired
-    private LinkRepository linkRepo;
+    private LinkRepository         linkRepo;
     @Autowired
-    private ProposalRepository proposalRepo;
+    private ProposalRepository     proposalRepo;
     @Autowired
-    private AuditRepository auditRepo;
+    private AuditRepository        auditRepo;
     @Autowired
-    private AuditTypeRepository auditTypeRepo;
+    private AuditTypeRepository    auditTypeRepo;
     ///////////// KI - old db
     @Autowired
-    private KiGameTypeRepository kiTypeRepo;
+    private KiGameTypeRepository   kiTypeRepo;
     @Autowired
-    private KiStatusRepository kiStatusRepo;
+    private KiStatusRepository     kiStatusRepo;
     @Autowired
-    private KiSubRegionRepository kiSubRegionRepo;
+    private KiSubRegionRepository  kiSubRegionRepo;
     @Autowired
-    private KiRegionRepository kiRegionRepo;
+    private KiRegionRepository     kiRegionRepo;
     @Autowired
-    private KiPolygonRepository kiPolygonRepo;
+    private KiPolygonRepository    kiPolygonRepo;
     @Autowired
-    private KiGameRepository kiGameRepo;
+    private KiGameRepository       kiGameRepo;
     @Autowired
-    private KiGameDateRepository kiGameDateRepo;
+    private KiGameDateRepository   kiGameDateRepo;
     @Autowired
-    private KiPhotoRepository kiPhotoRepo;
+    private KiPhotoRepository      kiPhotoRepo;
     @Autowired
-    private KiReviewRepository kiReviewRepo;
+    private KiReviewRepository     kiReviewRepo;
     @Autowired
-    private KiAddUriRepository kiAddUriRepo;
+    private KiAddUriRepository     kiAddUriRepo;
     @Autowired
-    private KiUpdateRepository kiUpdateRepo;
+    private KiUpdateRepository     kiUpdateRepo;
     @Autowired
     private KiUpdateTypeRepository kiUpdateTypeRepo;
     /////////////
@@ -112,15 +113,14 @@ public class Converter {
         LOG.info("Old games processing " + kiGameRepo.count());
         kiGameRepo.findAll().forEach(kiGame -> {
             List<KiGameDate> gameDateList = kiGameDateRepo.findTop1ByGameId(kiGame.getId());
-            // Не забыть убрать
-            GameType gameType = oldType.get(kiGame.getType());
-            Date start = new Date();
+                        Date start = new Date();
             Date end = new Date();
             if (gameDateList.size() > 0) {
                 start = gameDateList.get(0).getBegin();
                 end = endDate(start, gameDateList.get(0).getTime());
             }
-            Game game = new Game(kiGame.getName(),
+            Game game = new Game(kiGame.getId().longValue(),
+                    kiGame.getName(),
                     oldStatus.get(kiGame.getStatus()),
                     oldRegion.get(kiGame.getSubRegionId()),
                     start,

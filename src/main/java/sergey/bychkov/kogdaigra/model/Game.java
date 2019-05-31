@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Game implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long allRpgId;
     private String name;
